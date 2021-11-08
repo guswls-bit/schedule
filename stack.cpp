@@ -1,40 +1,59 @@
 #include<stdio.h>
 #include<stdlib.h>
-struct stack {
-	int size,data;
-	void push(int value);
-	void pop();
-	void empty();
-	void set_size();
-	void creat_size();
-	void top();
-};
-struct stack* stptr = (stack*)malloc(1 * sizeof(stack));
+typedef struct stack {
+	int data;
+	int* head;
+}stack;
+int size=1;
+void push(int value); //값을 맨위에 저장
+void pop(); //맨위에 값을 출력 및 삭제 & 맨위에 메모리 해제
+int empty(); //stptr에 할당되어있는 메모리가 할당되어있는지 아닌지 확인	
+void set_size(); //
+void creat_size();
+void top();
+stack* stptr = (stack*)calloc(1, sizeof(int));
+int a=1;
 int main() {
-	stptr->size = 1;
-	stptr->push(1);
-	//stptr->push(2);
-	//stptr->push(3);
-	stptr->pop();
-	//stptr->pop();
-	//stptr->top();
+	push(1);
+	push(2);
+	push(3);
+	pop();
+	pop();
+	top();
+	free(stptr);
 }
-void stack::set_size() {
-	(stack*)realloc(stptr, sizeof(int) * size);
+void set_size() {
+	free(stptr);
+	size--;
+	creat_size();
 }
-
-void stack::push(int value) {
-	stptr->set_size();
-	stptr->size++;
-	
-}
-void stack::pop() {
-
-}
-void stack::top() {
-
+void creat_size() {
+	(stack*) realloc(stptr, sizeof(int)*size);
 }
 
-void stack::empty() {
+void push(int value) {
+	if (a) {
+		(stptr + size)->data = value;
+		a = 0;
+		size++;
+	}
+	else {
+		creat_size();
+		(stptr + size)->data = value;
+		size++;
+	}
+}
+void pop() {
+	if (empty()) {
+		throw "There is not memory"; exit(-1);
+	}
+	printf("%d", (stptr + size - 1)->data);
+	set_size();
+}
+void top() {
+	printf("%d", (stptr + size - 1)->data);
 }
 
+int empty() {
+	return size == 0;
+}
